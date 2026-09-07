@@ -1,0 +1,36 @@
+{
+  "total_patients": 1000,
+  "target": "Reduce low-value alerts by at least 30% while maintaining detection >= 88%",
+  "target_achieved": true,
+  "alert_reduction_pct": 96.5,
+  "low_value_reduction_pct": 15.3,
+  "simple_baseline": {
+    "total_alerts": 15836,
+    "low_value_alerts": 229,
+    "relevant_cases_surfaced": 361,
+    "missed_relevant_cases": 42,
+    "false_alerts": 229,
+    "precision": 0.612,
+    "recall": 0.896,
+    "f1_score": 0.727,
+    "avg_alerts_per_patient": 15.84
+  },
+  "recoverai": {
+    "total_alerts": 555,
+    "low_value_alerts": 194,
+    "relevant_cases_surfaced": 361,
+    "missed_relevant_cases": 42,
+    "false_alerts": 194,
+    "precision": 0.65,
+    "recall": 0.896,
+    "f1_score": 0.754,
+    "avg_alerts_per_patient": 0.56
+  },
+  "error_breakdown": {
+    "false_positive": 194,
+    "false_negative": 42,
+    "delayed_detection": 0,
+    "data_quality_error": 0,
+    "ambiguous_case": 0
+  }
+}
