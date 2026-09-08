@@ -1,32 +1,131 @@
-# RecoverAI: Problem Analysis & Clinical Need
+﻿# RecoverAI — Problem Analysis
 
-## 1. Post-Operative Remote Monitoring Bottlenecks
-Post-operative recovery is transitioning from extended hospital stays to home-based recovery pathways. While remote patient monitoring (RPM) empowers patients to report pain, temperature, wound condition, and symptoms from home, modern surgical teams face severe operational bottlenecks:
+## 1. Operational Problem
 
-1. **Alarm Fatigue & Low-Value Alert Flooding**:
-   Conventional monitoring systems rely on static, universal physiological thresholds (e.g., Pain $\ge 7/10$, Temperature $\ge 38.0^\circ$C). A single transient spike after physiotherapy or a hot meal immediately fires an urgent alert, even if the patient promptly returns to their baseline.
-2. **Missing Longitudinal Trajectory**:
-   A patient whose pain score steadily climbs from $2 \to 4 \to 6$ over 4 days is experiencing clinically significant deterioration, yet static thresholds ignore this gradual trajectory until an arbitrary boundary is crossed.
-3. **Absence of Personalized Baselines**:
-   Every patient possesses an individual surgical baseline. An elderly patient with pre-existing osteoarthritis recovering from knee replacement operates at a different pain baseline than an otherwise healthy laparoscopic cholecystectomy patient. Static thresholds fail to account for patient-specific variance.
-4. **Isolated Signal Blindness**:
-   True surgical deterioration (such as deep surgical site infection or anastomotic leak) rarely manifests in a single metric. It exhibits **concordant multi-signal movement**: escalating pain, low-grade temperature drift, and wound erythema/discharge occurring simultaneously.
-5. **Unresolved Action Items & Escalation Gaps**:
-   Alerts that trigger in care team portals often lack strict ownership, SLAs, or escalation pathways. Without automated supervisor escalation, high-priority deteriorations can remain unreviewed during peak shift transitions.
+Post-operative patients are discharged home earlier than ever due to healthcare capacity pressure. Surgical teams now rely on **remote patient monitoring (RPM)** — patients self-report pain scores, temperatures, and wound observations from home via mobile apps or SMS.
+
+This transition creates a severe operational failure:
+
+> Care teams receive thousands of raw home readings but cannot determine which observations represent genuine clinical deterioration and which are low-value transient fluctuations.
 
 ---
 
-## 2. Core Operational Philosophy: Beyond Static Cutoffs
-RecoverAI rejects the naive paradigm:
-$$\text{Reading} \longrightarrow \text{Threshold} \longrightarrow \text{Alert}$$
+## 2. Current State Pain Points
 
-In its place, RecoverAI implements the multi-dimensional clinical decision-support framework:
-$$\text{Observation} \longrightarrow \text{Data Quality} \longrightarrow \text{Personal Baseline} \longrightarrow \text{Temporal Trend} \longrightarrow \text{Persistence} \longrightarrow \text{Multi-Signal Concordance} \longrightarrow \text{Episode Deduplication} \longrightarrow \text{Care Team Ownership} \longrightarrow \text{SLA Escalation}$$
+### 2.1 Alarm Fatigue
+Conventional monitoring applies static, population-level thresholds (e.g. Pain >= 7/10, Temperature >= 38.0°C). Any single reading that crosses a threshold fires an alert — regardless of context, patient history, or whether the reading is isolated or part of a worsening pattern.
+
+**Result**: A 1,000-patient cohort generates approximately 15,836 alerts per monitoring cycle. Care teams cannot meaningfully respond to this volume.
+
+### 2.2 Missed Gradual Deterioration
+A patient whose pain score climbs from 2 → 4 → 6 over 4 days is experiencing genuine clinical deterioration. Static thresholds do not detect this gradual trajectory until an arbitrary fixed cutoff is finally exceeded — by which point the clinical window for early intervention may have passed.
+
+### 2.3 No Patient-Specific Baselines
+An elderly patient recovering from knee replacement surgery has a different pain baseline than a healthy 30-year-old recovering from laparoscopic cholecystectomy. Static population cutoffs treat all patients identically, generating both false positives (alerts on patients with naturally higher baselines) and false negatives (missing deterioration in patients with naturally low baselines).
+
+### 2.4 Isolated Signal Blindness
+True post-operative complications (surgical site infection, anastomotic leak, pulmonary embolism) rarely manifest in a single metric. They present as **concordant multi-signal movement**: escalating pain, low-grade fever, and wound inflammation occurring simultaneously over multiple observations. Single-signal alerting misses this clinical pattern entirely.
+
+### 2.5 Unresolved Ownership and Escalation Gaps
+Alerts generated without explicit owners, due dates, or escalation pathways are frequently ignored during shift transitions. High-priority deteriorations can remain unreviewed for hours while staff are occupied with in-patient responsibilities.
 
 ---
 
-## 3. Measurable Impact Goals
-- **Alert Fatigue Reduction**: Reduce low-value alarms by at least **30%** (Achieved: **96.5%** on synthetic cohort).
-- **Clinical Safety Preservation**: Maintain or improve detection sensitivity ($\ge 88\%$) on true deteriorating cases (Achieved: **89.6%** recall).
-- **Explainability Transparency**: Provide explicit "What Changed?" and "Why No Alert?" breakdowns for every evaluation.
-- **Workflow Integrity**: Ensure every actionable alert generates a task with an assigned owner, SLA due date, and multi-tier escalation to supervisors if unresolved.
+## 3. Consequences
+
+| Consequence | Clinical Impact |
+|:---|:---|
+| Alert fatigue | Care team stops reading alerts; genuine deterioration ignored |
+| Missed gradual deterioration | Patient admitted to emergency with preventable complication |
+| False alarms for stable patients | Unnecessary clinical contact; patient anxiety; staff time wasted |
+| Ownership gap | Deteriorating patient receives no timely intervention during shift change |
+| Silent monitoring gap | Patient stops reporting; system assumes stable; missed deterioration |
+
+---
+
+## 4. Users Affected
+
+| User | Pain Point |
+|:---|:---|
+| **Nurse Reviewer** | Receives 15-20 alerts/patient/week; cannot review all meaningfully |
+| **Care Coordinator** | Relies on manual file review to spot monitoring gaps |
+| **Clinical Supervisor** | No visibility into unresolved escalations across team |
+| **Patient (home)** | Receives unnecessary call-backs for isolated harmless readings |
+| **Clinical Operations** | No measurable alert quality metric; cannot assess system performance |
+
+---
+
+## 5. Problem Statement (Formal)
+
+> Post-operative patients report pain, temperature, and wound observations from home. The organisation needs a solution because care teams receive too many low-value readings and miss meaningful changes.
+>
+> The system must translate the operational problem into a **trend summariser** that **prioritises meaningful change over individual abnormal readings**.
+
+---
+
+## 6. Proposed Solution: RecoverAI Philosophy
+
+RecoverAI rejects the naive monitoring paradigm:
+
+```
+Reading --> Fixed Threshold --> Alert
+```
+
+In its place, RecoverAI implements a multi-dimensional clinical decision-support framework:
+
+```
+Observation
+  --> Data Quality Validation
+  --> Patient-Specific Baseline Computation
+  --> Temporal Trend Analysis (slope + persistence)
+  --> Multi-Signal Concordance Check
+  --> Episode Deduplication and Grouping
+  --> Composite Risk Scoring with Explainability
+  --> Care Team Ownership Assignment
+  --> SLA-Driven Escalation
+```
+
+**The core question changes from:**
+> "Is this reading outside a fixed threshold?"
+
+**To:**
+> "Has this patient's recovery trajectory meaningfully changed from their personal baseline, persistently, across multiple concordant signals?"
+
+---
+
+## 7. Measurable Impact Goals
+
+| Goal | Target | Achieved (Synthetic) |
+|:---|:---|:---|
+| Reduce low-value alerts | >= 30% reduction | 96.5% reduction |
+| Maintain clinical sensitivity | >= 88% recall | 89.6% recall |
+| Explainability | Every alert explains WHY | "What Changed?" + "Why No Alert?" panels |
+| Ownership | Every alert has named owner + SLA | Implemented via EscalationEngine |
+| Unresolved action tracking | No high-priority case silently disappears | Level 3 escalation queue; Overdue badge |
+
+---
+
+## 8. Scope and Constraints
+
+**In Scope (Prototype):**
+- Pain, temperature, wound observations from synthetic home data
+- Symptom reports (patient_reported_concern: None/Mild/Moderate/Severe)
+- Patient-specific baselines
+- Trend summarisation
+- Alert episode grouping and deduplication
+- Three-tier escalation
+- Failure mode documentation
+
+**Out of Scope (Prototype):**
+- Real patient data (all synthetic)
+- Real-time sensor streaming
+- Wound photograph analysis
+- Medication management
+- Emergency dispatch integration
+- Regulatory approval
+
+---
+
+## 9. Clinical Safety Statement
+
+This prototype is a decision-support tool for human review. It does not diagnose patients, prescribe treatment, or provide autonomous emergency response. All outputs are advisory and require qualified clinical review before any action is taken.

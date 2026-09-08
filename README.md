@@ -80,7 +80,6 @@ $$\text{Observation} \longrightarrow \text{Data Quality} \longrightarrow \text{P
 - **Database**: SQLite (default local zero-configuration), PostgreSQL compatible
 - **Frontend**: React 19, TypeScript, Vite, Tailwind CSS, Lucide React, Recharts
 - **Testing**: Pytest (39 automated unit & integration tests)
-- **Containerization**: Docker, Docker Compose
 
 ---
 
@@ -143,14 +142,7 @@ npm run dev
 ```
 Open **`http://127.0.0.1:5173/`** in your browser.
 
-### Option B: Docker Compose
-```bash
-docker-compose up --build
-```
-- Frontend: `http://localhost:5173`
-- Backend API & OpenAPI Docs: `http://localhost:8000/docs`
-
-### Option C: Run Automated Tests
+### Option B: Run Automated Tests
 ```powershell
 python -m pytest backend/tests -v
 ```
@@ -220,8 +212,6 @@ recoverai/
 │   ├── run_evaluation.py            # Rigorous baseline benchmark runner
 │   ├── seed_database.py             # SQLite/Postgres database seeder
 │   └── run_pipeline.py              # One-command automated orchestrator
-├── docker-compose.yml
-├── Dockerfile
 ├── requirements.txt
 └── README.md
 ```

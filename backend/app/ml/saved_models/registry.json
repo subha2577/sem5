@@ -109,6 +109,62 @@
       "multi_signal_flag": 0.0,
       "data_quality_score": 0.0
     },
+    "is_active": false
+  },
+  {
+    "model_name": "trend-risk-classifier",
+    "version_tag": "v1.0.0",
+    "trained_at": "2026-09-08T06:44:05.734178",
+    "metrics": {
+      "precision": 0.996,
+      "recall": 0.996,
+      "f1_score": 0.996,
+      "roc_auc": 0.9993,
+      "confusion_matrix": [
+        [
+          148,
+          1
+        ],
+        [
+          0,
+          101
+        ]
+      ],
+      "feature_importance": {
+        "mobility_score": 0.2782,
+        "fatigue_score": 0.2425,
+        "current_wound_score": 0.2115,
+        "current_pain": 0.2015,
+        "current_temp": 0.0408,
+        "temp_short_slope": 0.017,
+        "delta_temp": 0.0085,
+        "delta_pain": 0.0,
+        "delta_wound": 0.0,
+        "pain_short_slope": 0.0,
+        "wound_short_slope": 0.0,
+        "persistence_count": 0.0,
+        "multi_signal_flag": 0.0,
+        "data_quality_score": 0.0
+      },
+      "train_samples": 750,
+      "test_samples": 250
+    },
+    "feature_importance": {
+      "mobility_score": 0.2782,
+      "fatigue_score": 0.2425,
+      "current_wound_score": 0.2115,
+      "current_pain": 0.2015,
+      "current_temp": 0.0408,
+      "temp_short_slope": 0.017,
+      "delta_temp": 0.0085,
+      "delta_pain": 0.0,
+      "delta_wound": 0.0,
+      "pain_short_slope": 0.0,
+      "wound_short_slope": 0.0,
+      "persistence_count": 0.0,
+      "multi_signal_flag": 0.0,
+      "data_quality_score": 0.0
+    },
     "is_active": true
   }
 ]
