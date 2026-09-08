@@ -2,7 +2,7 @@
 
 > **Intelligent Trend Detection, Personal Baseline Modeling, Alert Episode Grouping, and Escalation Management for Post-Operative Home Recovery.**
 
-[![Tests](https://img.shields.io/badge/pytest-39%20passed-emerald)](file:///d:/My%20Documents/sem%205/backend/tests)
+[![Tests](https://img.shields.io/badge/pytest-59%20passed-emerald)](file:///d:/My%20Documents/sem%205/backend/tests)
 [![Alert Reduction](https://img.shields.io/badge/Alert%20Reduction-96.5%25-cyan)](file:///d:/My%20Documents/sem%205/docs/evaluation_report.md)
 [![Safety Notice](https://img.shields.io/badge/Decision%20Support-Clinical%20Review%20Required-amber)](#safety-notice)
 
