@@ -46,11 +46,16 @@ RecoverAI implements a robust 4-tier hybrid architecture combining deterministic
 - Outputs a 0–100 Data Quality Score without silently discarding unvalidated telemetry.
 
 ### 2. Personal Baseline Engine (`baseline_engine.py`)
-- Computes patient-specific rolling baseline statistics ($\mu, \sigma$, median) over a stable window.
-- Derives patient-specific deltas:
-  $$\Delta_{\text{pain}} = \text{current} - \text{baseline}_{\text{pain}}$$
-  $$\Delta_{\text{temp}} = \text{current} - \text{baseline}_{\text{temp}}$$
-  $$\Delta_{\text{wound}} = \text{current} - \text{baseline}_{\text{wound}}$$
+- Computes patient-specific rolling baseline statistics ($\mu, \sigma$, median) over a 5-observation rolling window.
+- **Early Post-Discharge & Sparse Reporting Handling (First 48 Hours)**:
+  - **Cold-Start Problem ($N < 3$ observations)**: During the initial 48 hours post-discharge or when data is sparse ($N < 3$ valid unquarantined observations), personal rolling variance standard deviations ($\sigma$) cannot be reliably estimated.
+  - **Hybrid Population Default Fallback**: The engine flags `baseline_uncertain = True`, attaches a transparent warning note, and uses clinical default prior baselines ($\text{Pain} = 3.0$, $\text{Temp} = 36.8^\circ\text{C}$, $\text{Wound} = 1.0$) with default standard deviations ($\sigma_{\text{pain}}=0.5, \sigma_{\text{temp}}=0.2, \sigma_{\text{wound}}=0.3$).
+  - **Dynamic Transition**: As soon as $\ge 3$ valid observations are ingested, the system automatically transitions from population defaults to pure rolling median ($\text{Med}(x)$) and sample standard deviation ($\text{Std}(x)$), unflagging the uncertainty state.
+  - **Quarantine Filtering**: Observations flagged as invalid/quarantined by the Data Quality Engine are excluded from rolling median calculation to prevent baseline pollution from sensor noise.
+- Derives patient-specific deltas & Z-scores:
+  $$\Delta_{\text{pain}} = \text{current} - \text{baseline}_{\text{pain}}, \quad Z_{\text{pain}} = \frac{\Delta_{\text{pain}}}{\max(\sigma_{\text{pain}}, 0.2)}$$
+  $$\Delta_{\text{temp}} = \text{current} - \text{baseline}_{\text{temp}}, \quad Z_{\text{temp}} = \frac{\Delta_{\text{temp}}}{\max(\sigma_{\text{temp}}, 0.1)}$$
+  $$\Delta_{\text{wound}} = \text{current} - \text{baseline}_{\text{wound}}, \quad Z_{\text{wound}} = \frac{\Delta_{\text{wound}}}{\max(\sigma_{\text{wound}}, 0.1)}$$
 
 ### 3. Trend Engine (`trend_engine.py`)
 - Evaluates rate of change via closed-form linear regression slopes ($O(1)$ arithmetic):

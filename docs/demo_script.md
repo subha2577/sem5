@@ -1,4 +1,4 @@
-﻿# RecoverAI — 3-Minute Executive Demonstration Script
+# RecoverAI — 3-Minute Executive Demonstration Script
 
 ## Prerequisites
 - Backend running: `python -m uvicorn backend.app.main:app --host 127.0.0.1 --port 8000`
@@ -71,17 +71,31 @@
 
 ---
 
-## [2:40 – 3:00] Escalation, Overdue Tasks, and Conclusion
+## [2:40 – 3:10] Interactive Simulation Sandbox & Scenario Testing
 
 **Spoken narration:**
-> "Every unsuppressed High Priority alert generates a task with an owner, a due date, and an automatic escalation chain. If the nurse does not resolve within 2 hours, the system escalates to the Clinical Supervisor. If that also fails, it escalates to the Operations Queue — and the task remains visible until resolved. It cannot silently disappear. RecoverAI turns thousands of disconnected home observations into an actionable, prioritised recovery trajectory, ensuring care teams act on meaningful change — without drowning in alarms."
+> "In addition to static cohort review, RecoverAI includes an interactive Simulation Sandbox. Evaluators and clinical leads can choose any of the 6 core post-operative recovery scenarios — such as acute wound deterioration or isolated transient fever spikes — and run real-time telemetry simulations. The sandbox immediately processes the trajectory through our six intelligence engines and displays side-by-side comparative reactions, showing exact baseline deltas, risk score progression, and suppression Rationale."
 
 **Actions on screen:**
-1. Click Tasks and Escalations in the sidebar
-2. Show `REC-005` task: OVERDUE badge, Level 2 Escalation, assigned to Dr. Miller (Clinical Supervisor)
-3. Click Check Overdue Escalations to demonstrate live escalation check
-4. Click Data Quality to briefly show quarantined records (impossible readings from Group H)
-5. Close with Analytics page showing 96.5% alert reduction as final summary
+1. Click **Simulation Sandbox** in the left navigation sidebar.
+2. Select **Scenario 3: Multi-Signal Post-Op Deterioration**.
+3. Click **Run Interactive Simulation**.
+4. Highlight the live telemetry feed, real-time risk score gauge jump (14 -> 88), and generated SLA task assignment.
+5. Contrast with **Scenario 2: Isolated Post-PT Transient Spike** to demonstrate immediate suppression card rendering.
+
+---
+
+## [3:10 – 3:30] Escalation, Overdue Tasks, and Conclusion
+
+**Spoken narration:**
+> "Every unsuppressed High Priority alert in the Clinician Triage Queue generates a task with an assigned owner, SLA timer, and escalation chain. If the nurse does not resolve within 2 hours, the system escalates to the Clinical Supervisor. If that also fails, it escalates to the Operations Queue — ensuring no patient falls through the cracks. RecoverAI turns thousands of disconnected home observations into actionable, prioritised recovery trajectories, ensuring care teams act on meaningful change — without drowning in alarms."
+
+**Actions on screen:**
+1. Click **Tasks & Escalations** in the sidebar.
+2. Highlight patient `REC-005`: OVERDUE badge, Level 2 Escalation, assigned to Dr. Miller (Clinical Supervisor).
+3. Click **Check Overdue Escalations** to demonstrate live background SLA check.
+4. Click **Data Quality** to briefly show quarantined records (impossible readings from Group H).
+5. Conclude on the **Alert Analytics** page highlighting the 96.5% alert reduction metric.
 
 ---
 

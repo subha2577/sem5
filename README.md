@@ -128,24 +128,50 @@ RecoverAI automatically synthesizes realistic post-operative cohorts across **10
 - Python 3.12+
 - Node.js v20+ / npm v10+
 
-### Option A: Complete Pipeline in One Command
-```powershell
-# 1. Run full pipeline: generates 1,000 patients & 50,000 observations, trains ML model, runs empirical evaluation, and seeds SQLite DB
-python scripts/run_pipeline.py --patients 1000 --observations 50000
+### Option A: Running Automated Unit & Integration Tests
+RecoverAI includes **59 automated unit and integration tests** covering all six clinical intelligence engines, data quality quarantines, baseline calculations, episode deduplication, and task escalation chains.
 
-# 2. Start Backend API Server (Port 8000)
+```powershell
+# Run the full backend test suite with verbose output
+python -m pytest backend/tests -v
+
+# Run a specific test module (e.g. baseline or trend engine tests)
+python -m pytest backend/tests/test_baseline_engine.py -v
+python -m pytest backend/tests/test_trend_engine.py -v
+python -m pytest backend/tests/test_edge_cases.py -v
+```
+
+### Option B: Generating Synthetic Cohorts & Running Full ML Pipeline
+You can configure and generate synthetic post-operative patient telemetry across 10 distinct recovery trajectories (Group A through Group J).
+
+```powershell
+# 1. Custom Synthetic Data Generation
+# Generates 1,000 patients and 50,000 longitudinal observations saved to data/synthetic/
+python scripts/generate_data.py --patients 1000 --observations 50000
+
+# 2. Train Explainable ML Model & Register Artifacts
+python scripts/train_model.py
+
+# 3. Run Benchmark Evaluation (Calculates Alert Reduction & Baseline Comparison)
+python scripts/run_evaluation.py
+
+# 4. Seed Database (SQLite local database)
+python scripts/seed_database.py
+
+# --- OR Run Full Pipeline in One Command ---
+python scripts/run_pipeline.py --patients 1000 --observations 50000
+```
+
+### Option C: Start Local Development Servers
+```powershell
+# 1. Start Backend API Server (Port 8000)
 python -m uvicorn backend.app.main:app --host 127.0.0.1 --port 8000
 
-# 3. Start Frontend Dashboard (Port 5173) in a second terminal
+# 2. Start Frontend Dashboard (Port 5173) in a second terminal
 cd frontend
 npm run dev
 ```
 Open **`http://127.0.0.1:5173/`** in your browser.
-
-### Option B: Run Automated Tests
-```powershell
-python -m pytest backend/tests -v
-```
 
 ---
 
